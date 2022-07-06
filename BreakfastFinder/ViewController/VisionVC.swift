@@ -26,6 +26,7 @@ class VisionObjectRecognitionViewController: ViewController {
         super.viewDidLoad()
         
         boxesView.backgroundColor = .clear
+        
         self.view.bringSubviewToFront(boxesView)
         
         command["type"]="bus"
@@ -33,6 +34,10 @@ class VisionObjectRecognitionViewController: ViewController {
         prepareObjectTrackingRequest()
     }
     
+    override func viewWillTransition(to size: CGSize, with coordinator: UIViewControllerTransitionCoordinator) {
+        super.viewWillTransition(to: size, with: coordinator)
+        self.boxesView.bufferSize=self.bufferSize
+    }
    
         
     func prepareObjectTrackingRequest() {
@@ -47,6 +52,7 @@ class VisionObjectRecognitionViewController: ViewController {
             return
         }
         
+        // define object recognition request
         let objectRecognitionRequest = VNCoreMLRequest(model: visionModel!, completionHandler: { (request, error) in
             
             if error != nil {
@@ -63,6 +69,7 @@ class VisionObjectRecognitionViewController: ViewController {
             guard let target=self.command["type"] else {return}
             
             // go over all detected objects to find whether there exist "bus"
+            // if yes, add it to trackingRequest list
             for result in results {
                 if result.label == target {
                     DispatchQueue.main.async {
@@ -76,14 +83,13 @@ class VisionObjectRecognitionViewController: ViewController {
                 }
             }
             
-            // though no bus, find other things
+            // after going over all result, we might notice there is no bus
+            // but we find other things in current context
             if trackRequests.count==0 && results.count>0 {
                 self.audioTracker.status=Status.notFound
                 let tempLen=((5<results.count) ? 5:results.count)-1
                 // TODO: add audio output
                 print("no bus found. found other instead")
-                
-//                Set(results[0...tempLen].forEach($0.label))
                 
                 for result in results[0...tempLen]{
                     if self.audioTracker.foundObject.insert(result.label ?? "").0 {
@@ -97,6 +103,8 @@ class VisionObjectRecognitionViewController: ViewController {
             
             
         })
+        
+        
         // Start with detection.  Find object, then track it.
         self.detectionRequests = [objectRecognitionRequest]
         self.sequenceRequestHandler = VNSequenceRequestHandler()
@@ -124,25 +132,21 @@ class VisionObjectRecognitionViewController: ViewController {
     
     override func captureOutput(_ output: AVCaptureOutput, didOutput sampleBuffer: CMSampleBuffer, from connection: AVCaptureConnection) {
         
+        // configuration for objectRecognitionRequest
         var requestHandlerOptions: [VNImageOption: AnyObject] = [:]
         let cameraIntrinsicData = CMGetAttachment(sampleBuffer, key: kCMSampleBufferAttachmentKey_CameraIntrinsicMatrix, attachmentModeOut: nil)
         if cameraIntrinsicData != nil {
             requestHandlerOptions[VNImageOption.cameraIntrinsics] = cameraIntrinsicData
         }
-        
         guard let pixelBuffer = CMSampleBufferGetImageBuffer(sampleBuffer) else {
             return
         }
-        
         let exifOrientation = exifOrientationFromDeviceOrientation()
-        self.audioTracker.status=Status.notFound
+        
+        
+        // if the current trackingRequest list is empty, we need to perform the initial object detection
         guard let requests = self.trackingRequests, !requests.isEmpty else {
-            // No tracking object detected, so perform initial detection
-//           TODO: speakObjectDetectionStatus(string:"No bus on screen")
-//            print("no bus on screen")
-            if self.audioTracker.status != Status.notFound {
-                self.audioTracker.status = Status.notFound
-            }
+            
             let imageRequestHandler = VNImageRequestHandler(cvPixelBuffer: pixelBuffer,
                                                             orientation: exifOrientation,
                                                             options: requestHandlerOptions)
@@ -158,6 +162,7 @@ class VisionObjectRecognitionViewController: ViewController {
             return
         }
         
+        // now we can safely start trackingRequest
         do {
             try self.sequenceRequestHandler.perform(requests,
                                                      on: pixelBuffer,
@@ -166,41 +171,42 @@ class VisionObjectRecognitionViewController: ViewController {
             NSLog("Failed to perform SequenceRequest: %@", error)
         }
         
-        // Setup the next round of tracking.
+        // then we need to initiate a new round of trackingRequest
         var newTrackingRequests = [VNTrackObjectRequest]()
+        
         for trackingRequest in requests {
-            
             guard let results = trackingRequest.results else {
                 return
             }
-            
             guard let observation = results[0] as? VNDetectedObjectObservation else {
                 return
             }
             
+            // if current frame's request isn't lastFrame, we need to track the same object in next frame
             if !trackingRequest.isLastFrame {
-                if observation.confidence > 0.3 {
+                if observation.confidence > 0.3 { // if very confident, next request is still not the lastFrame
                     trackingRequest.inputObservation = observation
                 } else {
-                    trackingRequest.isLastFrame = true
+                    trackingRequest.isLastFrame = true // otherwise, next request is LastFrame
                     //TODO: speakObjectDetectionStatus(string:"Bus is going to disappear")
                     print("Bus is going to disappear")
                     self.audioTracker.status=Status.disappearing
                 }
-                newTrackingRequests.append(trackingRequest)
+                newTrackingRequests.append(trackingRequest) // add new request into tracking list
             }
         }
         
         self.trackingRequests = newTrackingRequests
+        
+        // Nothing to track, so abort
         if newTrackingRequests.isEmpty {
             self.boxesView.predictedObjects=[]
-            // Nothing to track, so abort.
-            //TODO: speakObjectDetectionStatus(string:"Bus disappeared on screen")
-            print("Bus disappeared on screen")
             if self.audioTracker.status==Status.disappeared{
                 self.audioTracker.status=Status.notFound
+                print("play not found music in app")
             }else if self.audioTracker.status==Status.disappearing{
                 self.audioTracker.status=Status.disappeared
+                print("Bus disappeared on screen")
             }
         }
         
@@ -218,18 +224,12 @@ class VisionObjectRecognitionViewController: ViewController {
                 return
             }
             // draw bounding box around bus
-            self.boxesView.predictedObjects = [observation]
+            boxesView.bufferSize = self.bufferSize
+            boxesView.predictedObjects = [observation]
             
             
-            let bdbox=VNImageRectForNormalizedRect(observation.boundingBox, Int(self.boxesView.frame.width), Int(self.boxesView.frame.height))
+            let bdbox=VNImageRectForNormalizedRect(observation.boundingBox, Int(self.bufferSize.width), Int(self.bufferSize.height))
             if let cropped_object_image=convertBufferToUIImage(pixelBuffer: pixelBuffer, boundingBox: bdbox){
-                // define text recognition requests and perform requests
-                DispatchQueue.main.async {
-                    let image = cropped_object_image
-                    let imageView = UIImageView(image: image)
-//                    imageView.frame = CGRect(x: 0, y: 0, width: 60, height: 60)
-                    self.boxesView.addSubview(imageView)
-                }
                 
                 OCR(image: cropped_object_image, useGCV: false)
                 // TODO: do ocr here and log detected text. only output stable text
@@ -282,9 +282,6 @@ class VisionObjectRecognitionViewController: ViewController {
             return observation.topCandidates(1).first?.string
         }
         numberTracker.recognizeTextFinish(results:recognizedStrings)
-        
-        // Process the recognized strings.
-//        processResults(recognizedStrings)
     }
    
     

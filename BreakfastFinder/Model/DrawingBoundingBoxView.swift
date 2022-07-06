@@ -15,6 +15,7 @@ class DrawingBoundingBoxView: UIView {
     static private var colors: [String: UIColor] = [:]
     private var foundSet = Set<String?>()
     var requiredItem: Set<String> = ["bus"]
+    var bufferSize: CGSize = .zero
     
     public func labelColor(with label: String) -> UIColor {
         if let color = DrawingBoundingBoxView.colors[label] {
@@ -48,7 +49,7 @@ class DrawingBoundingBoxView: UIView {
         
         let color: UIColor = labelColor(with: "bus")
         let bgRect = VNImageRectForNormalizedRect(prediction.boundingBox,
-                                                  Int(self.bounds.width),Int(self.bounds.height))
+                                                  Int(bufferSize.width),Int(bufferSize.height))
         
 //        let scale = CGAffineTransform.identity.scaledBy(x: bounds.width, y: bounds.height)
 //        let transform = CGAffineTransform(scaleX: 1, y: -1).translatedBy(x: 0, y: -1)

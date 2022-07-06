@@ -11,7 +11,7 @@ import Vision
 
 class ViewController: UIViewController, AVCaptureVideoDataOutputSampleBufferDelegate {
     
-    var bufferSize: CGSize = .zero
+    public var bufferSize: CGSize = .zero
     var rootLayer: CALayer! = nil
     
     @IBOutlet weak var previewView: UIView!
@@ -28,6 +28,20 @@ class ViewController: UIViewController, AVCaptureVideoDataOutputSampleBufferDele
     override func viewDidLoad() {
         super.viewDidLoad()
         self.setupAVCapture()
+    }
+    
+    override func viewWillTransition(to size: CGSize, with coordinator: UIViewControllerTransitionCoordinator) {
+        super.viewWillTransition(to: size, with: coordinator)
+
+        // Handle device orientation in the preview layer.
+        let deviceOrientation = UIDevice.current.orientation
+        if let videoPreviewLayerConnection = previewLayer.connection {
+            if let newVideoOrientation = AVCaptureVideoOrientation(deviceOrientation: deviceOrientation) {
+                videoPreviewLayerConnection.videoOrientation = newVideoOrientation
+            }
+        }
+        
+
     }
     
     override func didReceiveMemoryWarning() {
@@ -61,7 +75,9 @@ class ViewController: UIViewController, AVCaptureVideoDataOutputSampleBufferDele
             session.addOutput(videoDataOutput)
             // Add a video data output
             videoDataOutput.alwaysDiscardsLateVideoFrames = true
-            videoDataOutput.videoSettings = [kCVPixelBufferPixelFormatTypeKey as String: Int(kCVPixelFormatType_32BGRA)]
+            videoDataOutput.videoSettings = [kCVPixelBufferPixelFormatTypeKey as String: Int(kCVPixelFormatType_420YpCbCr8BiPlanarFullRange)]
+            
+            //kCVPixelFormatType_32BGRA
             videoDataOutput.setSampleBufferDelegate(self, queue: videoDataOutputQueue)
         } else {
             print("Could not add video data output to the session")
@@ -124,3 +140,14 @@ class ViewController: UIViewController, AVCaptureVideoDataOutputSampleBufferDele
     }
 }
 
+extension AVCaptureVideoOrientation {
+    init?(deviceOrientation: UIDeviceOrientation) {
+        switch deviceOrientation {
+        case .portrait: self = .portrait
+        case .portraitUpsideDown: self = .portraitUpsideDown
+        case .landscapeLeft: self = .landscapeRight
+        case .landscapeRight: self = .landscapeLeft
+        default: return nil
+        }
+    }
+}
