@@ -98,6 +98,7 @@ class AudioTracker{
     func objectOnScreen(){
         sound?.pause()
         synthesizer.stopSpeaking(at: .immediate)
+        foundObject.removeAll()
         speak(str: "Found on screen")
     }
     

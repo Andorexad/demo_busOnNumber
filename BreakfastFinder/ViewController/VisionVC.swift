@@ -265,6 +265,8 @@ class VisionObjectRecognitionViewController: ViewController {
             
             
             let bdbox=VNImageRectForNormalizedRect(observation.boundingBox, Int(self.bufferSize.width), Int(self.bufferSize.height))
+            
+            
             if let cropped_object_image=convertBufferToUIImage(pixelBuffer: pixelBuffer, boundingBox: bdbox){
 //                DispatchQueue.main.async {
 //                    let uiimageview=UIImageView(image: cropped_object_image)
@@ -296,11 +298,11 @@ class VisionObjectRecognitionViewController: ViewController {
         // Get the CGImage on which to perform requests.
         guard let cgImage = image.cgImage else{ return}
         let requestHandler = VNImageRequestHandler(cgImage: cgImage,orientation: exifOrientationFromDeviceOrientation(), options: [:])
-
-
+//        let requestHandler = VNImageRequestHandler(cvPixelBuffer: pixelBuffer, orientation: exifOrientationFromDeviceOrientation(), options: [:])
+        
         // Create a new request to recognize text.
         let request = VNRecognizeTextRequest(completionHandler: recognizeTextHandler)
-
+//        request.regionOfInterest=bd
 
         do {
             // Perform the text-recognition request.

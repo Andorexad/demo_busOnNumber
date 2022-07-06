@@ -128,9 +128,11 @@ class ViewController: UIViewController, AVCaptureVideoDataOutputSampleBufferDele
         case UIDeviceOrientation.portraitUpsideDown:  // Device oriented vertically, home button on the top
             exifOrientation = .left
         case UIDeviceOrientation.landscapeLeft:       // Device oriented horizontally, home button on the right
-            exifOrientation = .upMirrored
+            //exifOrientation = .upMirrored
+            exifOrientation = .right
         case UIDeviceOrientation.landscapeRight:      // Device oriented horizontally, home button on the left
-            exifOrientation = .down
+            //exifOrientation = .down
+            exifOrientation = .left
         case UIDeviceOrientation.portrait:            // Device oriented vertically, home button on the bottom
             exifOrientation = .up
         default:
