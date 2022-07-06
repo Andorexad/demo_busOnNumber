@@ -5,7 +5,7 @@
 # Finder
 .DS_Store
 BreakfastFinder/*.mlmodel
-
+resource
 # Xcode - User files
 xcuserdata/
 
