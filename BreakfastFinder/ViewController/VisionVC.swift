@@ -9,27 +9,34 @@ import Vision
 @available(iOS 13.0, *)
 class VisionObjectRecognitionViewController: ViewController {
     
-    private var detectionRequests: [VNCoreMLRequest]?
-    private var trackingRequests: [VNTrackObjectRequest]?
+    private var detectionRequests: [VNCoreMLRequest]? // request list for object detection
+    private var trackingRequests: [VNTrackObjectRequest]? // request list for tracking
     lazy var sequenceRequestHandler = VNSequenceRequestHandler()
     
     @IBOutlet weak var boxesView: DrawingBoundingBoxView!
+    
     var predictions: [VNRecognizedObjectObservation] = []
     
     var command: [String:String]=[:]
     
     var numberTracker=StringTracker()
+    var audioTracker=AudioTracker()
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        boxesView.backgroundColor = .clear
         self.view.bringSubviewToFront(boxesView)
+        
+        command["type"]="bus"
+        
         prepareObjectTrackingRequest()
     }
     
    
         
     func prepareObjectTrackingRequest() {
-        var requests = [VNTrackObjectRequest]()
+        var trackRequests = [VNTrackObjectRequest]()
         
         let yoloModel = YOLOv3()
         var visionModel: VNCoreMLModel?
@@ -39,6 +46,7 @@ class VisionObjectRecognitionViewController: ViewController {
             print("ObjectDetection error: \(String(describing: error)).")
             return
         }
+        
         let objectRecognitionRequest = VNCoreMLRequest(model: visionModel!, completionHandler: { (request, error) in
             
             if error != nil {
@@ -52,36 +60,40 @@ class VisionObjectRecognitionViewController: ViewController {
             
             
             
+            guard let target=self.command["type"] else {return}
             
-            //guard let target=self.command["type"] else {return}
-            
-            let target="bus"
-            
-            
-            for result in results { //
+            // go over all detected objects to find whether there exist "bus"
+            for result in results {
                 if result.label == target {
-                    // find bus
                     DispatchQueue.main.async {
+                        // TODO: speak find bus
+                        self.audioTracker.status = Status.onScreen
                         print("find bus")
                         // Add this bus observation to the tracking list
                         let objectTrackingRequest = VNTrackObjectRequest(detectedObjectObservation: result)
-                        requests.append(objectTrackingRequest)
+                        trackRequests.append(objectTrackingRequest)
                     }
                 }
             }
             
-            
-            if requests.count==0 && results.count>0 {
-                // not find bus, speak other 5 things
+            // though no bus, find other things
+            if trackRequests.count==0 && results.count>0 {
+                self.audioTracker.status=Status.notFound
                 let tempLen=((5<results.count) ? 5:results.count)-1
                 // TODO: add audio output
-                print("no bus found. found ")
+                print("no bus found. found other instead")
+                
+//                Set(results[0...tempLen].forEach($0.label))
+                
                 for result in results[0...tempLen]{
-                    print(result.labels.first!)
+                    if self.audioTracker.foundObject.insert(result.label ?? "").0 {
+                        self.audioTracker.speakContext(str: result.label ?? "")
+                    }
+                    print(result.label!)
                 }
                 return // no need to add any trackingRequest
             }
-            self.trackingRequests = requests
+            self.trackingRequests = trackRequests
             
             
         })
@@ -108,11 +120,7 @@ class VisionObjectRecognitionViewController: ViewController {
         self.numberTracker.playSound(str: string)
     }
     
-    // when can the app speak?
-//    func speakObjectDetectionStatus(string: String){
-//        if now-lastSpeak <= 3 && status_no_change {return}
-//        speak(string)
-//    }
+    
     
     override func captureOutput(_ output: AVCaptureOutput, didOutput sampleBuffer: CMSampleBuffer, from connection: AVCaptureConnection) {
         
@@ -127,11 +135,14 @@ class VisionObjectRecognitionViewController: ViewController {
         }
         
         let exifOrientation = exifOrientationFromDeviceOrientation()
-        
+        self.audioTracker.status=Status.notFound
         guard let requests = self.trackingRequests, !requests.isEmpty else {
             // No tracking object detected, so perform initial detection
-//            speakObjectDetectionStatus(string:"No bus on screen")
+//           TODO: speakObjectDetectionStatus(string:"No bus on screen")
 //            print("no bus on screen")
+            if self.audioTracker.status != Status.notFound {
+                self.audioTracker.status = Status.notFound
+            }
             let imageRequestHandler = VNImageRequestHandler(cvPixelBuffer: pixelBuffer,
                                                             orientation: exifOrientation,
                                                             options: requestHandlerOptions)
@@ -172,8 +183,9 @@ class VisionObjectRecognitionViewController: ViewController {
                     trackingRequest.inputObservation = observation
                 } else {
                     trackingRequest.isLastFrame = true
-                    //speakObjectDetectionStatus(string:"Bus is going to disappear")
+                    //TODO: speakObjectDetectionStatus(string:"Bus is going to disappear")
                     print("Bus is going to disappear")
+                    self.audioTracker.status=Status.disappearing
                 }
                 newTrackingRequests.append(trackingRequest)
             }
@@ -181,10 +193,15 @@ class VisionObjectRecognitionViewController: ViewController {
         
         self.trackingRequests = newTrackingRequests
         if newTrackingRequests.isEmpty {
+            self.boxesView.predictedObjects=[]
             // Nothing to track, so abort.
-            //speakObjectDetectionStatus(string:"Bus disappeared on screen")
+            //TODO: speakObjectDetectionStatus(string:"Bus disappeared on screen")
             print("Bus disappeared on screen")
-            return
+            if self.audioTracker.status==Status.disappeared{
+                self.audioTracker.status=Status.notFound
+            }else if self.audioTracker.status==Status.disappearing{
+                self.audioTracker.status=Status.disappeared
+            }
         }
         
         
@@ -201,13 +218,19 @@ class VisionObjectRecognitionViewController: ViewController {
                 return
             }
             // draw bounding box around bus
-            DispatchQueue.main.async {
-//                let res=observation as! VNRecognizedObjectObservation
-                self.boxesView.predictedObjects = [observation]
-            }
+            self.boxesView.predictedObjects = [observation]
             
-            if let cropped_object_image=convertBufferToUIImage(pixelBuffer: pixelBuffer, boundingBox: observation.boundingBox){
+            
+            let bdbox=VNImageRectForNormalizedRect(observation.boundingBox, Int(self.boxesView.frame.width), Int(self.boxesView.frame.height))
+            if let cropped_object_image=convertBufferToUIImage(pixelBuffer: pixelBuffer, boundingBox: bdbox){
                 // define text recognition requests and perform requests
+                DispatchQueue.main.async {
+                    let image = cropped_object_image
+                    let imageView = UIImageView(image: image)
+//                    imageView.frame = CGRect(x: 0, y: 0, width: 60, height: 60)
+                    self.boxesView.addSubview(imageView)
+                }
+                
                 OCR(image: cropped_object_image, useGCV: false)
                 // TODO: do ocr here and log detected text. only output stable text
                 

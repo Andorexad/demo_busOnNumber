@@ -11,14 +11,7 @@ import UIKit
 import Vision
 import AVFoundation
 
-// announceType: lastAnnouncedFrame
-struct AudioTracker {
-    var disappeared:Int64
-    var noOnScreen:Int64
-    var willDisappear:Int64
-    var fiveOther:Int64
-    var detectedStr:Int64
-}
+
 
 @available(iOS 13.0, *)
 class StringTracker {
@@ -34,9 +27,8 @@ class StringTracker {
     var lastSpeakFrame = Int64(0)
     var lastSpeakString = ""
     
-    var audiotracker=AudioTracker(disappeared: -1,noOnScreen: -1,willDisappear: -1,fiveOther: -1,detectedStr: -1)
     
-
+    
     func logFrame(results: [String]) {
         for result in results {
             var removedString = result

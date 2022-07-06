@@ -10,13 +10,13 @@
 		F0109C21286F70D700B2E32F /* StringUtils.swift in Sources */ = {isa = PBXBuildFile; fileRef = F0109C20286F70D700B2E32F /* StringUtils.swift */; };
 		F052EFD1286509FB00954BC5 /* YOLOv3.mlmodel in Sources */ = {isa = PBXBuildFile; fileRef = F052EFD0286509FB00954BC5 /* YOLOv3.mlmodel */; };
 		F07FAEDA286601530079D0D1 /* DrawingBoundingBoxView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F07FAED9286601530079D0D1 /* DrawingBoundingBoxView.swift */; };
-		FA4750CA20BF3F48003E19ED /* Breakfast Finder Logo.png in Resources */ = {isa = PBXBuildFile; fileRef = FA4750C920BF3F48003E19ED /* Breakfast Finder Logo.png */; };
+		F0DA83472874BDD100E8F8C8 /* AudioUtils.swift in Sources */ = {isa = PBXBuildFile; fileRef = F0DA83462874BDD100E8F8C8 /* AudioUtils.swift */; };
+		F0DA834A2874CB5600E8F8C8 /* noBusFound.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = F0DA83492874CB5600E8F8C8 /* noBusFound.mp3 */; };
 		FAB417F62099308400494E9C /* VisionVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = FAB417F52099308400494E9C /* VisionVC.swift */; };
 		FAD5009F1ED668B60074D713 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = FAD5009E1ED668B60074D713 /* AppDelegate.swift */; };
 		FAD500A11ED668B60074D713 /* CaptureOutputVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = FAD500A01ED668B60074D713 /* CaptureOutputVC.swift */; };
 		FAD500A41ED668B60074D713 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = FAD500A21ED668B60074D713 /* Main.storyboard */; };
 		FAD500A61ED668B60074D713 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = FAD500A51ED668B60074D713 /* Assets.xcassets */; };
-		FAD500A91ED668B60074D713 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = FAD500A71ED668B60074D713 /* LaunchScreen.storyboard */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -26,14 +26,14 @@
 		F0109C20286F70D700B2E32F /* StringUtils.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StringUtils.swift; sourceTree = "<group>"; };
 		F052EFD0286509FB00954BC5 /* YOLOv3.mlmodel */ = {isa = PBXFileReference; lastKnownFileType = file.mlmodel; path = YOLOv3.mlmodel; sourceTree = "<group>"; };
 		F07FAED9286601530079D0D1 /* DrawingBoundingBoxView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DrawingBoundingBoxView.swift; sourceTree = "<group>"; };
-		FA4750C920BF3F48003E19ED /* Breakfast Finder Logo.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Breakfast Finder Logo.png"; sourceTree = SOURCE_ROOT; };
+		F0DA83462874BDD100E8F8C8 /* AudioUtils.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AudioUtils.swift; sourceTree = "<group>"; };
+		F0DA83492874CB5600E8F8C8 /* noBusFound.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = noBusFound.mp3; sourceTree = "<group>"; };
 		FAB417F52099308400494E9C /* VisionVC.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = VisionVC.swift; sourceTree = "<group>"; };
 		FAD5009B1ED668B60074D713 /* BreakfastFinder.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = BreakfastFinder.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		FAD5009E1ED668B60074D713 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		FAD500A01ED668B60074D713 /* CaptureOutputVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CaptureOutputVC.swift; sourceTree = "<group>"; };
 		FAD500A31ED668B60074D713 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		FAD500A51ED668B60074D713 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
-		FAD500A81ED668B60074D713 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		FAD500AA1ED668B60074D713 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -70,8 +70,17 @@
 			children = (
 				F07FAED9286601530079D0D1 /* DrawingBoundingBoxView.swift */,
 				F0109C20286F70D700B2E32F /* StringUtils.swift */,
+				F0DA83462874BDD100E8F8C8 /* AudioUtils.swift */,
 			);
 			path = Model;
+			sourceTree = "<group>";
+		};
+		F0DA83482874CA8B00E8F8C8 /* resource */ = {
+			isa = PBXGroup;
+			children = (
+				F0DA83492874CB5600E8F8C8 /* noBusFound.mp3 */,
+			);
+			path = resource;
 			sourceTree = "<group>";
 		};
 		FA86553BE8674B6BE41BAA64 /* Configuration */ = {
@@ -104,14 +113,13 @@
 		FAD5009D1ED668B60074D713 /* BreakfastFinder */ = {
 			isa = PBXGroup;
 			children = (
+				F0DA83482874CA8B00E8F8C8 /* resource */,
 				F0109C1F286F709D00B2E32F /* Model */,
 				F0109C1E286F3EF700B2E32F /* ViewController */,
 				FAD5009E1ED668B60074D713 /* AppDelegate.swift */,
 				F052EFD0286509FB00954BC5 /* YOLOv3.mlmodel */,
 				FAD500A21ED668B60074D713 /* Main.storyboard */,
 				FAD500A51ED668B60074D713 /* Assets.xcassets */,
-				FAD500A71ED668B60074D713 /* LaunchScreen.storyboard */,
-				FA4750C920BF3F48003E19ED /* Breakfast Finder Logo.png */,
 				FAD500AA1ED668B60074D713 /* Info.plist */,
 			);
 			path = BreakfastFinder;
@@ -177,9 +185,8 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				FA4750CA20BF3F48003E19ED /* Breakfast Finder Logo.png in Resources */,
-				FAD500A91ED668B60074D713 /* LaunchScreen.storyboard in Resources */,
 				FAD500A61ED668B60074D713 /* Assets.xcassets in Resources */,
+				F0DA834A2874CB5600E8F8C8 /* noBusFound.mp3 in Resources */,
 				FAD500A41ED668B60074D713 /* Main.storyboard in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -196,6 +203,7 @@
 				F07FAEDA286601530079D0D1 /* DrawingBoundingBoxView.swift in Sources */,
 				FAB417F62099308400494E9C /* VisionVC.swift in Sources */,
 				FAD500A11ED668B60074D713 /* CaptureOutputVC.swift in Sources */,
+				F0DA83472874BDD100E8F8C8 /* AudioUtils.swift in Sources */,
 				FAD5009F1ED668B60074D713 /* AppDelegate.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -209,14 +217,6 @@
 				FAD500A31ED668B60074D713 /* Base */,
 			);
 			name = Main.storyboard;
-			sourceTree = "<group>";
-		};
-		FAD500A71ED668B60074D713 /* LaunchScreen.storyboard */ = {
-			isa = PBXVariantGroup;
-			children = (
-				FAD500A81ED668B60074D713 /* Base */,
-			);
-			name = LaunchScreen.storyboard;
 			sourceTree = "<group>";
 		};
 /* End PBXVariantGroup section */
