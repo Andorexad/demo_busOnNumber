@@ -36,6 +36,17 @@ class DrawingBoundingBoxView: UIView {
         }
     }
     
+    
+//    func drawContextBoxes(with predictions: [VNRecognizedObjectObservation]) {
+//        DispatchQueue.main.async{
+//            self.subviews.forEach({ $0.removeFromSuperview() })
+//
+//            for prediction in predictions {
+//                self.createLabelAndBox(prediction: prediction)
+//            }
+//        }
+//    }
+    
     func drawBoxs(with predictions: [VNDetectedObjectObservation]) {
         
         self.subviews.forEach({ $0.removeFromSuperview() })
@@ -43,6 +54,30 @@ class DrawingBoundingBoxView: UIView {
         for prediction in predictions {
             self.createLabelAndBox(prediction: prediction)
         }
+    }
+    
+    func createLabelAndBox(prediction: VNRecognizedObjectObservation) {
+        let predictedLabel = prediction.label ?? ""
+        let color: UIColor = labelColor(with: predictedLabel)
+        let bgRect = VNImageRectForNormalizedRect(prediction.boundingBox,
+                                                  Int(bufferSize.width),Int(bufferSize.height))
+
+
+        let bgView = UIView(frame: bgRect)
+        bgView.layer.borderColor = color.cgColor
+        bgView.layer.borderWidth = 4
+        bgView.backgroundColor = UIColor.clear
+        addSubview(bgView)
+
+        let label = UILabel(frame: CGRect(x: 0, y: 0, width: 300, height: 300))
+        label.text = predictedLabel
+        label.font = UIFont.systemFont(ofSize: 13)
+        label.textColor = UIColor.black
+        label.backgroundColor = color
+        label.sizeToFit()
+        label.frame = CGRect(x: bgRect.origin.x, y: bgRect.origin.y - label.frame.height,
+                             width: label.frame.width, height: label.frame.height)
+        addSubview(label)
     }
     
     func createLabelAndBox(prediction: VNDetectedObjectObservation) {
@@ -70,8 +105,6 @@ class DrawingBoundingBoxView: UIView {
         label.frame = CGRect(x: bgRect.origin.x, y: bgRect.origin.y - label.frame.height,
                              width: label.frame.width, height: label.frame.height)
         addSubview(label)
-        
-
     }
 
     func playSound( str: String ){

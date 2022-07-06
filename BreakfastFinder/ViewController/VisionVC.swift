@@ -22,6 +22,11 @@ class VisionObjectRecognitionViewController: ViewController {
     var numberTracker=StringTracker()
     var audioTracker=AudioTracker()
     
+    var fps=30
+    var lastContextTS = CMTime()
+    var curTS = CMTime()
+    var lastTS = CMTime()
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -32,6 +37,8 @@ class VisionObjectRecognitionViewController: ViewController {
         command["type"]="bus"
         
         prepareObjectTrackingRequest()
+        
+        
     }
     
     override func viewWillTransition(to size: CGSize, with coordinator: UIViewControllerTransitionCoordinator) {
@@ -40,6 +47,16 @@ class VisionObjectRecognitionViewController: ViewController {
     }
    
         
+    func resetContextAfter5sec(){
+        let deltaTime = curTS - lastContextTS
+        if deltaTime >= CMTimeMake(value: 250, timescale: Int32(fps)) {
+            audioTracker.resetContext()
+            lastContextTS = curTS
+        }
+    }
+    
+    
+    
     func prepareObjectTrackingRequest() {
         var trackRequests = [VNTrackObjectRequest]()
         
@@ -74,7 +91,7 @@ class VisionObjectRecognitionViewController: ViewController {
                 if result.label == target {
                     DispatchQueue.main.async {
                         // TODO: speak find bus
-                        self.audioTracker.status = Status.onScreen
+                        self.audioTracker.setStatus(newstatus: Status.onScreen)
                         print("find bus")
                         // Add this bus observation to the tracking list
                         let objectTrackingRequest = VNTrackObjectRequest(detectedObjectObservation: result)
@@ -86,22 +103,25 @@ class VisionObjectRecognitionViewController: ViewController {
             // after going over all result, we might notice there is no bus
             // but we find other things in current context
             if trackRequests.count==0 && results.count>0 {
-                self.audioTracker.status=Status.notFound
+                self.audioTracker.setStatus(newstatus: Status.notFound)
                 let tempLen=((5<results.count) ? 5:results.count)-1
-                // TODO: add audio output
-                print("no bus found. found other instead")
+                
+//                self.boxesView.predictedObjects=results
+//                self.boxesView.predictedObjects= as! [VNDetectedObjectObservation]
+                //print("no bus found. found other instead")
+                
+                
+                var tempSet=Set<String>()
                 
                 for result in results[0...tempLen]{
-                    if self.audioTracker.foundObject.insert(result.label ?? "").0 {
-                        self.audioTracker.speakContext(str: result.label ?? "")
-                    }
-                    print(result.label!)
+                    tempSet.insert(result.label ?? "")
                 }
+                print(tempSet)
+                self.audioTracker.foundObject=tempSet
+                
                 return // no need to add any trackingRequest
             }
             self.trackingRequests = trackRequests
-            
-            
         })
         
         
@@ -124,32 +144,46 @@ class VisionObjectRecognitionViewController: ViewController {
     }
     
     
-    func speak(string: String){
-        self.numberTracker.playSound(str: string)
-    }
+//    func speak(string: String){
+//        self.numberTracker.playSound(str: string)
+//    }
     
     
     
     override func captureOutput(_ output: AVCaptureOutput, didOutput sampleBuffer: CMSampleBuffer, from connection: AVCaptureConnection) {
+    
+        
+        
+        // 1/30 s /frame
+//        let deltaTime = curTS - lastTS
+//        if deltaTime < CMTimeMake(value: 1, timescale: Int32(fps)) {
+//            return
+//        }
+//        self.audioTracker.playMusic_NoObject()
+        resetContextAfter5sec()
+        lastTS = curTS
+        curTS = CMSampleBufferGetPresentationTimeStamp(sampleBuffer)
         
         // configuration for objectRecognitionRequest
-        var requestHandlerOptions: [VNImageOption: AnyObject] = [:]
-        let cameraIntrinsicData = CMGetAttachment(sampleBuffer, key: kCMSampleBufferAttachmentKey_CameraIntrinsicMatrix, attachmentModeOut: nil)
-        if cameraIntrinsicData != nil {
-            requestHandlerOptions[VNImageOption.cameraIntrinsics] = cameraIntrinsicData
-        }
+//        var requestHandlerOptions: [VNImageOption: AnyObject] = [:]
+//        let cameraIntrinsicData = CMGetAttachment(sampleBuffer, key: kCMSampleBufferAttachmentKey_CameraIntrinsicMatrix, attachmentModeOut: nil)
+//        if cameraIntrinsicData != nil {
+//            requestHandlerOptions[VNImageOption.cameraIntrinsics] = cameraIntrinsicData
+//        }
         guard let pixelBuffer = CMSampleBufferGetImageBuffer(sampleBuffer) else {
             return
         }
-        let exifOrientation = exifOrientationFromDeviceOrientation()
-        
+      
         
         // if the current trackingRequest list is empty, we need to perform the initial object detection
         guard let requests = self.trackingRequests, !requests.isEmpty else {
             
+//            let imageRequestHandler = VNImageRequestHandler(cvPixelBuffer: pixelBuffer,
+//                                                            orientation: exifOrientation,
+//                                                            options: requestHandlerOptions)
             let imageRequestHandler = VNImageRequestHandler(cvPixelBuffer: pixelBuffer,
-                                                            orientation: exifOrientation,
-                                                            options: requestHandlerOptions)
+                                                            orientation: exifOrientationFromDeviceOrientation(),
+                                                            options: [:])
             
             do {
                 guard let detectRequests = self.detectionRequests else {
@@ -162,11 +196,14 @@ class VisionObjectRecognitionViewController: ViewController {
             return
         }
         
+        curTS = CMSampleBufferGetPresentationTimeStamp(sampleBuffer)
+        resetContextAfter5sec()
+        
         // now we can safely start trackingRequest
         do {
             try self.sequenceRequestHandler.perform(requests,
                                                      on: pixelBuffer,
-                                                     orientation: exifOrientation)
+                                                     orientation: exifOrientationFromDeviceOrientation())
         } catch let error as NSError {
             NSLog("Failed to perform SequenceRequest: %@", error)
         }
@@ -188,9 +225,8 @@ class VisionObjectRecognitionViewController: ViewController {
                     trackingRequest.inputObservation = observation
                 } else {
                     trackingRequest.isLastFrame = true // otherwise, next request is LastFrame
-                    //TODO: speakObjectDetectionStatus(string:"Bus is going to disappear")
                     print("Bus is going to disappear")
-                    self.audioTracker.status=Status.disappearing
+                    self.audioTracker.setStatus(newstatus: Status.disappearing)
                 }
                 newTrackingRequests.append(trackingRequest) // add new request into tracking list
             }
@@ -201,6 +237,7 @@ class VisionObjectRecognitionViewController: ViewController {
         // Nothing to track, so abort
         if newTrackingRequests.isEmpty {
             self.boxesView.predictedObjects=[]
+            
             if self.audioTracker.status==Status.disappeared{
                 self.audioTracker.status=Status.notFound
                 print("play not found music in app")
@@ -219,7 +256,6 @@ class VisionObjectRecognitionViewController: ViewController {
             }
             
             
-            
             guard let observation = trackingResults[0] as? VNDetectedObjectObservation else {
                 return
             }
@@ -230,10 +266,12 @@ class VisionObjectRecognitionViewController: ViewController {
             
             let bdbox=VNImageRectForNormalizedRect(observation.boundingBox, Int(self.bufferSize.width), Int(self.bufferSize.height))
             if let cropped_object_image=convertBufferToUIImage(pixelBuffer: pixelBuffer, boundingBox: bdbox){
-                
+//                DispatchQueue.main.async {
+//                    let uiimageview=UIImageView(image: cropped_object_image)
+//                    self.view.addSubview(uiimageview)
+//                }
                 OCR(image: cropped_object_image, useGCV: false)
-                // TODO: do ocr here and log detected text. only output stable text
-                
+               
             }
         }
     }
@@ -257,7 +295,7 @@ class VisionObjectRecognitionViewController: ViewController {
         print("start ocr")
         // Get the CGImage on which to perform requests.
         guard let cgImage = image.cgImage else{ return}
-        let requestHandler = VNImageRequestHandler(cgImage: cgImage)
+        let requestHandler = VNImageRequestHandler(cgImage: cgImage,orientation: exifOrientationFromDeviceOrientation(), options: [:])
 
 
         // Create a new request to recognize text.
