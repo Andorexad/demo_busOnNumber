@@ -254,8 +254,6 @@ class VisionObjectRecognitionViewController: ViewController {
             guard let trackingResults = trackingRequest.results else {
                 return
             }
-            
-            
             guard let observation = trackingResults[0] as? VNDetectedObjectObservation else {
                 return
             }
@@ -263,17 +261,10 @@ class VisionObjectRecognitionViewController: ViewController {
             boxesView.bufferSize = self.bufferSize
             boxesView.predictedObjects = [observation]
             
-            
+            // do ocr on bus section
             let bdbox=VNImageRectForNormalizedRect(observation.boundingBox, Int(self.bufferSize.width), Int(self.bufferSize.height))
-            
-            
             if let cropped_object_image=convertBufferToUIImage(pixelBuffer: pixelBuffer, boundingBox: bdbox){
-//                DispatchQueue.main.async {
-//                    let uiimageview=UIImageView(image: cropped_object_image)
-//                    self.view.addSubview(uiimageview)
-//                }
                 OCR(image: cropped_object_image, useGCV: false)
-               
             }
         }
     }
@@ -285,24 +276,20 @@ class VisionObjectRecognitionViewController: ViewController {
     
     
     
-//    func OCR(image: UIImage, useGCV: Bool ) -> [String]{
-//        return []
-//    }
-//
+    // TODO: filtering results strings
     func filtering(strings:[String], command: [String]) -> [String]{
         return strings
     }
     
+    // there might be some problem with the cropped image that the current on-device is low-quality
     func OCR(image: UIImage, useGCV: Bool ){
         print("start ocr")
         // Get the CGImage on which to perform requests.
         guard let cgImage = image.cgImage else{ return}
         let requestHandler = VNImageRequestHandler(cgImage: cgImage,orientation: exifOrientationFromDeviceOrientation(), options: [:])
-//        let requestHandler = VNImageRequestHandler(cvPixelBuffer: pixelBuffer, orientation: exifOrientationFromDeviceOrientation(), options: [:])
         
         // Create a new request to recognize text.
         let request = VNRecognizeTextRequest(completionHandler: recognizeTextHandler)
-//        request.regionOfInterest=bd
 
         do {
             // Perform the text-recognition request.
@@ -312,6 +299,8 @@ class VisionObjectRecognitionViewController: ViewController {
         }
     }
                 
+    // be called after textRecognition is finished
+    // log results into stringTracker
     func recognizeTextHandler(request: VNRequest, error: Error?) {
         guard let observations =
                 request.results as? [VNRecognizedTextObservation] else {
@@ -323,6 +312,32 @@ class VisionObjectRecognitionViewController: ViewController {
         }
         numberTracker.recognizeTextFinish(results:recognizedStrings)
     }
+    
+    
+    
+    // MARK: below are helper functions that might be useful
+    
+    // add any image to the current view
+    func addImageView(image: UIImage){
+        DispatchQueue.main.async {
+            let uiimageview=UIImageView(image: image)
+            self.view.addSubview(uiimageview)
+        }
+    }
+    
+    
+    // MARK: jump to still image mode
+    @IBAction func takePictureTapped(_ sender: Any) {
+        
+        // take picture
+        // send pic to next viewcontroller, and display it there
+        handleTakePhoto()
+        //stopSession()
+        audioTracker.stopAllSound()
+    }
+    
+    
+                    
    
     
 }

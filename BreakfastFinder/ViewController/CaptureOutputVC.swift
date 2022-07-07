@@ -9,7 +9,8 @@ import UIKit
 import AVFoundation
 import Vision
 
-class ViewController: UIViewController, AVCaptureVideoDataOutputSampleBufferDelegate {
+@available(iOS 13.0, *)
+class ViewController: UIViewController, AVCaptureVideoDataOutputSampleBufferDelegate, AVCapturePhotoCaptureDelegate {
     
     public var bufferSize: CGSize = .zero
     var rootLayer: CALayer! = nil
@@ -21,6 +22,12 @@ class ViewController: UIViewController, AVCaptureVideoDataOutputSampleBufferDele
     
     private let videoDataOutputQueue = DispatchQueue(label: "VideoDataOutput", qos: .userInitiated, attributes: [], autoreleaseFrequency: .workItem)
     
+    public func stopSession(){
+        session.stopRunning()
+    }
+    public func restartsession(){
+        session.startRunning()
+    }
     func captureOutput(_ output: AVCaptureOutput, didOutput sampleBuffer: CMSampleBuffer, from connection: AVCaptureConnection) {
         // to be implemented in the VisionVC
     }
@@ -84,6 +91,12 @@ class ViewController: UIViewController, AVCaptureVideoDataOutputSampleBufferDele
             session.commitConfiguration()
             return
         }
+        
+        // add photoOutput
+        if session.canAddOutput(photoOutput) {
+            session.addOutput(photoOutput)
+        }
+        
         let captureConnection = videoDataOutput.connection(with: .video)
         // Always process the frames
         captureConnection?.isEnabled = true
@@ -121,6 +134,7 @@ class ViewController: UIViewController, AVCaptureVideoDataOutputSampleBufferDele
     }
     
     public func exifOrientationFromDeviceOrientation() -> CGImagePropertyOrientation {
+        // conversion between UIDeviceOrientation and CGImagePropertyOrientation
         let curDeviceOrientation = UIDevice.current.orientation
         let exifOrientation: CGImagePropertyOrientation
         
@@ -140,9 +154,46 @@ class ViewController: UIViewController, AVCaptureVideoDataOutputSampleBufferDele
         }
         return exifOrientation
     }
+    
+    // MARK: function for take a picture
+    let photoOutput = AVCapturePhotoOutput()
+    
+//    @objc private func handleDismiss() {
+//        DispatchQueue.main.async {
+//            self.dismiss(animated: true, completion: nil)
+//        }
+//    }
+    
+    func handleTakePhoto() {
+        let photoSettings = AVCapturePhotoSettings()
+        if let photoPreviewType = photoSettings.availablePreviewPhotoPixelFormatTypes.first {
+            photoSettings.previewPhotoFormat = [kCVPixelBufferPixelFormatTypeKey as String: photoPreviewType]
+            photoOutput.capturePhoto(with: photoSettings, delegate: self)
+        }
+    }
+    
+    func photoOutput(_ output: AVCapturePhotoOutput, didFinishProcessingPhoto photo: AVCapturePhoto, error: Error?) {
+        guard let imageData = photo.fileDataRepresentation() else { return }
+        let previewImage = UIImage(data: imageData)
+        
+        let storyBoard : UIStoryboard = UIStoryboard(name: "Main", bundle:nil)
+        let photoVC = storyBoard.instantiateViewController(withIdentifier: "PhotoVC") as! PhotoVC
+        photoVC.image=previewImage
+        self.present(photoVC, animated:true, completion:nil)
+        //self.view.addSubviews(photoPreviewContainer)
+        stopSession()
+    }
+    
+     //mute ....shutter sound
+    func photoOutput(_ output: AVCapturePhotoOutput, willCapturePhotoFor resolvedSettings: AVCaptureResolvedPhotoSettings) {
+            // dispose system shutter sound
+            AudioServicesDisposeSystemSoundID(1108)
+        }
+    
 }
 
 extension CGImagePropertyOrientation {
+    // conversion between UIImageOrientation and CGImagePropertyOrientation
     init(_ uiOrientation: UIImage.Orientation) {
         switch uiOrientation {
             case .up: self = .up
@@ -157,9 +208,16 @@ extension CGImagePropertyOrientation {
             fatalError()
         }
     }
+    
+    
+    
+    
+    
+    
 }
 
 extension AVCaptureVideoOrientation {
+    // conversion between AVCaptureVideoOrientation and UIDeviceOrientation
     init?(deviceOrientation: UIDeviceOrientation) {
         switch deviceOrientation {
         case .portrait: self = .portrait

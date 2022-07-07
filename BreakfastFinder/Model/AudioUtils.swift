@@ -130,6 +130,11 @@ class AudioTracker{
         sound?.play()
     }
     
+    func stopAllSound(){
+        synthesizer.stopSpeaking(at: .immediate)
+        sound?.stop()
+    }
+    
 //    func speakContext(str:String?){
 //        if str == nil {return}
 //        sound?.pause()

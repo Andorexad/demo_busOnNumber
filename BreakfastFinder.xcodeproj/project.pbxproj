@@ -12,6 +12,7 @@
 		F07FAEDA286601530079D0D1 /* DrawingBoundingBoxView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F07FAED9286601530079D0D1 /* DrawingBoundingBoxView.swift */; };
 		F0DA83472874BDD100E8F8C8 /* AudioUtils.swift in Sources */ = {isa = PBXBuildFile; fileRef = F0DA83462874BDD100E8F8C8 /* AudioUtils.swift */; };
 		F0DA834A2874CB5600E8F8C8 /* noBusFound.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = F0DA83492874CB5600E8F8C8 /* noBusFound.mp3 */; };
+		F0DA834C28764BDB00E8F8C8 /* PhotoVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = F0DA834B28764BDB00E8F8C8 /* PhotoVC.swift */; };
 		FAB417F62099308400494E9C /* VisionVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = FAB417F52099308400494E9C /* VisionVC.swift */; };
 		FAD5009F1ED668B60074D713 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = FAD5009E1ED668B60074D713 /* AppDelegate.swift */; };
 		FAD500A11ED668B60074D713 /* CaptureOutputVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = FAD500A01ED668B60074D713 /* CaptureOutputVC.swift */; };
@@ -27,6 +28,7 @@
 		F07FAED9286601530079D0D1 /* DrawingBoundingBoxView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DrawingBoundingBoxView.swift; sourceTree = "<group>"; };
 		F0DA83462874BDD100E8F8C8 /* AudioUtils.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AudioUtils.swift; sourceTree = "<group>"; };
 		F0DA83492874CB5600E8F8C8 /* noBusFound.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = noBusFound.mp3; sourceTree = "<group>"; };
+		F0DA834B28764BDB00E8F8C8 /* PhotoVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotoVC.swift; sourceTree = "<group>"; };
 		FAB417F52099308400494E9C /* VisionVC.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = VisionVC.swift; sourceTree = "<group>"; };
 		FAD5009B1ED668B60074D713 /* BreakfastFinder.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = BreakfastFinder.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		FAD5009E1ED668B60074D713 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -60,6 +62,7 @@
 			children = (
 				FAB417F52099308400494E9C /* VisionVC.swift */,
 				FAD500A01ED668B60074D713 /* CaptureOutputVC.swift */,
+				F0DA834B28764BDB00E8F8C8 /* PhotoVC.swift */,
 			);
 			path = ViewController;
 			sourceTree = "<group>";
@@ -199,6 +202,7 @@
 				F0109C21286F70D700B2E32F /* StringUtils.swift in Sources */,
 				F052EFD1286509FB00954BC5 /* YOLOv3.mlmodel in Sources */,
 				F07FAEDA286601530079D0D1 /* DrawingBoundingBoxView.swift in Sources */,
+				F0DA834C28764BDB00E8F8C8 /* PhotoVC.swift in Sources */,
 				FAB417F62099308400494E9C /* VisionVC.swift in Sources */,
 				FAD500A11ED668B60074D713 /* CaptureOutputVC.swift in Sources */,
 				F0DA83472874BDD100E8F8C8 /* AudioUtils.swift in Sources */,

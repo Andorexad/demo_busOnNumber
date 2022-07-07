@@ -4,6 +4,7 @@
     <dependencies>
         <deployment identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="19519"/>
+        <capability name="System colors in document resources" minToolsVersion="11.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <scenes>
@@ -19,16 +20,26 @@
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="dae-ps-LA7" userLabel="takePic">
+                                <rect key="frame" x="125" y="606" width="125" height="31"/>
+                                <state key="normal" title="Button"/>
+                                <buttonConfiguration key="configuration" style="plain" image="camera.circle.fill" catalog="system" title="Take Picture"/>
+                                <connections>
+                                    <action selector="takePictureTapped:" destination="BYZ-38-t0r" eventType="touchUpInside" id="65z-Ak-Ug2"/>
+                                </connections>
+                            </button>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="zYv-jP-kCr" userLabel="boxView" customClass="DrawingBoundingBoxView" customModule="BreakfastFinder" customModuleProvider="target">
-                                <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                                <rect key="frame" x="0.0" y="0.0" width="375" height="581"/>
                             </view>
                         </subviews>
                         <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         <constraints>
                             <constraint firstItem="zYv-jP-kCr" firstAttribute="top" secondItem="y3c-jy-aDJ" secondAttribute="bottom" id="ERM-eQ-bNv"/>
                             <constraint firstAttribute="trailing" secondItem="zYv-jP-kCr" secondAttribute="trailing" id="TgF-9z-gya"/>
+                            <constraint firstItem="dae-ps-LA7" firstAttribute="centerX" secondItem="zYv-jP-kCr" secondAttribute="centerX" id="Yam-9A-cVQ"/>
                             <constraint firstItem="zYv-jP-kCr" firstAttribute="leading" secondItem="8bC-Xf-vdC" secondAttribute="leading" id="bcV-9J-BUM"/>
-                            <constraint firstItem="wfy-db-euE" firstAttribute="top" secondItem="zYv-jP-kCr" secondAttribute="bottom" id="hMJ-kQ-6Ab"/>
+                            <constraint firstItem="wfy-db-euE" firstAttribute="top" secondItem="zYv-jP-kCr" secondAttribute="bottom" constant="86" id="hMJ-kQ-6Ab"/>
+                            <constraint firstItem="wfy-db-euE" firstAttribute="top" secondItem="dae-ps-LA7" secondAttribute="bottom" constant="30" id="j1t-PE-Lb9"/>
                         </constraints>
                     </view>
                     <connections>
@@ -40,5 +51,78 @@
             </objects>
             <point key="canvasLocation" x="96.799999999999997" y="81.409295352323838"/>
         </scene>
+        <!--PhotoVC-->
+        <scene sceneID="zUM-ZA-MSD">
+            <objects>
+                <viewController storyboardIdentifier="PhotoVC" title="PhotoVC" id="CPU-Jh-xzi" customClass="PhotoVC" customModule="BreakfastFinder" customModuleProvider="target" sceneMemberID="viewController">
+                    <layoutGuides>
+                        <viewControllerLayoutGuide type="top" id="lOW-fk-cLJ"/>
+                        <viewControllerLayoutGuide type="bottom" id="3d6-3d-Plf"/>
+                    </layoutGuides>
+                    <view key="view" contentMode="scaleToFill" id="LAI-Ii-3f1">
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <button opaque="NO" contentMode="scaleToFill" ambiguous="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" pointerInteraction="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Bpt-0d-YNb">
+                                <rect key="frame" x="116.5" y="523" width="146.5" height="31"/>
+                                <state key="normal" title="Button"/>
+                                <buttonConfiguration key="configuration" style="tinted" image="text.magnifyingglass" catalog="system" title="On-device OCR"/>
+                                <connections>
+                                    <action selector="doOnDeviceOCR:" destination="CPU-Jh-xzi" eventType="touchUpInside" id="ag8-Eq-Urg"/>
+                                </connections>
+                            </button>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Xkh-ye-lM5" userLabel="backButton">
+                                <rect key="frame" x="12" y="20" width="46.5" height="31"/>
+                                <state key="normal" title="Button"/>
+                                <buttonConfiguration key="configuration" style="tinted" image="arrowshape.turn.up.backward.fill" catalog="system"/>
+                                <connections>
+                                    <action selector="backToVideo:" destination="CPU-Jh-xzi" eventType="touchUpInside" id="bua-El-Ga8"/>
+                                </connections>
+                            </button>
+                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="DqW-zi-kgU">
+                                <rect key="frame" x="68" y="100" width="239" height="355"/>
+                            </imageView>
+                            <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" fixedFrame="YES" editable="NO" text="no results yet" textAlignment="center" translatesAutoresizingMaskIntoConstraints="NO" id="Etm-rm-Ky1">
+                                <rect key="frame" x="69" y="562" width="238" height="85"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                                <color key="textColor" systemColor="labelColor"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
+                            </textView>
+                        </subviews>
+                        <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                        <constraints>
+                            <constraint firstAttribute="trailing" relation="greaterThanOrEqual" secondItem="Xkh-ye-lM5" secondAttribute="trailing" constant="20" symbolic="YES" id="5Io-1r-Hvi"/>
+                            <constraint firstAttribute="trailingMargin" secondItem="DqW-zi-kgU" secondAttribute="trailing" constant="52" id="5gg-qY-u1g"/>
+                            <constraint firstItem="Xkh-ye-lM5" firstAttribute="top" secondItem="lOW-fk-cLJ" secondAttribute="bottom" constant="20" id="IBE-N0-Ymc"/>
+                            <constraint firstItem="Xkh-ye-lM5" firstAttribute="leading" secondItem="LAI-Ii-3f1" secondAttribute="leading" constant="12" id="NNk-co-DjR"/>
+                            <constraint firstItem="Bpt-0d-YNb" firstAttribute="top" secondItem="lOW-fk-cLJ" secondAttribute="bottom" constant="523" id="VNI-47-78h"/>
+                            <constraint firstItem="Bpt-0d-YNb" firstAttribute="top" secondItem="DqW-zi-kgU" secondAttribute="bottom" constant="68" id="fZc-MX-9iv"/>
+                            <constraint firstItem="DqW-zi-kgU" firstAttribute="top" secondItem="lOW-fk-cLJ" secondAttribute="bottom" constant="100" id="htv-Lh-wEr"/>
+                            <constraint firstItem="DqW-zi-kgU" firstAttribute="leading" secondItem="LAI-Ii-3f1" secondAttribute="leadingMargin" constant="52" id="iNC-Je-O99"/>
+                        </constraints>
+                    </view>
+                    <connections>
+                        <outlet property="imageview" destination="DqW-zi-kgU" id="lxj-Tz-YX0"/>
+                        <outlet property="ondevice_ocr_button" destination="Bpt-0d-YNb" id="7jA-cw-Ft3"/>
+                        <outlet property="resultTextview" destination="Etm-rm-Ky1" id="R21-R4-Rad"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="wG2-4b-y3I" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="759.20000000000005" y="99.400299850074973"/>
+        </scene>
     </scenes>
+    <resources>
+        <image name="arrowshape.turn.up.backward.fill" catalog="system" width="128" height="106"/>
+        <image name="camera.circle.fill" catalog="system" width="128" height="121"/>
+        <image name="text.magnifyingglass" catalog="system" width="128" height="115"/>
+        <systemColor name="labelColor">
+            <color white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+        </systemColor>
+        <systemColor name="systemBackgroundColor">
+            <color white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+        </systemColor>
+    </resources>
 </document>
