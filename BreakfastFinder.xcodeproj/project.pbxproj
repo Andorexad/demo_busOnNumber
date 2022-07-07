@@ -7,8 +7,14 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		002F45F628767B210032DCB7 /* YOLOv3.mlmodel in Sources */ = {isa = PBXBuildFile; fileRef = 002F45F528767B210032DCB7 /* YOLOv3.mlmodel */; };
+		002F45F828769DAB0032DCB7 /* GoogleCloudOCRModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 002F45F728769DAB0032DCB7 /* GoogleCloudOCRModel.swift */; };
+		002F45FA28769DBA0032DCB7 /* GoogleCloudVisionOCR.swift in Sources */ = {isa = PBXBuildFile; fileRef = 002F45F928769DBA0032DCB7 /* GoogleCloudVisionOCR.swift */; };
+		002F46022876AC720032DCB7 /* filtering.swift in Sources */ = {isa = PBXBuildFile; fileRef = 002F46012876AC720032DCB7 /* filtering.swift */; };
+		002F46042876AC8B0032DCB7 /* TextRecognizer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 002F46032876AC8B0032DCB7 /* TextRecognizer.swift */; };
+		002F46062876AC970032DCB7 /* OnDeviceRecognizer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 002F46052876AC970032DCB7 /* OnDeviceRecognizer.swift */; };
+		EFA9E41DB39142087E31B9BE /* Pods_BreakfastFinder.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8E1FD2AD5446AC9F2E67B5EE /* Pods_BreakfastFinder.framework */; };
 		F0109C21286F70D700B2E32F /* StringUtils.swift in Sources */ = {isa = PBXBuildFile; fileRef = F0109C20286F70D700B2E32F /* StringUtils.swift */; };
-		F052EFD1286509FB00954BC5 /* YOLOv3.mlmodel in Sources */ = {isa = PBXBuildFile; fileRef = F052EFD0286509FB00954BC5 /* YOLOv3.mlmodel */; };
 		F07FAEDA286601530079D0D1 /* DrawingBoundingBoxView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F07FAED9286601530079D0D1 /* DrawingBoundingBoxView.swift */; };
 		F0DA83472874BDD100E8F8C8 /* AudioUtils.swift in Sources */ = {isa = PBXBuildFile; fileRef = F0DA83462874BDD100E8F8C8 /* AudioUtils.swift */; };
 		F0DA834A2874CB5600E8F8C8 /* noBusFound.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = F0DA83492874CB5600E8F8C8 /* noBusFound.mp3 */; };
@@ -21,10 +27,18 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		002F45F528767B210032DCB7 /* YOLOv3.mlmodel */ = {isa = PBXFileReference; lastKnownFileType = file.mlmodel; path = YOLOv3.mlmodel; sourceTree = "<group>"; };
+		002F45F728769DAB0032DCB7 /* GoogleCloudOCRModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GoogleCloudOCRModel.swift; sourceTree = "<group>"; };
+		002F45F928769DBA0032DCB7 /* GoogleCloudVisionOCR.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GoogleCloudVisionOCR.swift; sourceTree = "<group>"; };
+		002F46012876AC720032DCB7 /* filtering.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = filtering.swift; sourceTree = "<group>"; };
+		002F46032876AC8B0032DCB7 /* TextRecognizer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TextRecognizer.swift; sourceTree = "<group>"; };
+		002F46052876AC970032DCB7 /* OnDeviceRecognizer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OnDeviceRecognizer.swift; sourceTree = "<group>"; };
+		278F9401F5710D82A4E12783 /* Pods-BreakfastFinder.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-BreakfastFinder.debug.xcconfig"; path = "Target Support Files/Pods-BreakfastFinder/Pods-BreakfastFinder.debug.xcconfig"; sourceTree = "<group>"; };
 		7984D3D3A63BDFC4A07FEF8F /* SampleCode.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; name = SampleCode.xcconfig; path = Configuration/SampleCode.xcconfig; sourceTree = "<group>"; };
+		8E1FD2AD5446AC9F2E67B5EE /* Pods_BreakfastFinder.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_BreakfastFinder.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		9565333DCE68E3101EB36F3E /* Pods-BreakfastFinder.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-BreakfastFinder.release.xcconfig"; path = "Target Support Files/Pods-BreakfastFinder/Pods-BreakfastFinder.release.xcconfig"; sourceTree = "<group>"; };
 		E3CB966204CD821C6969C2A3 /* LICENSE.txt */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text; path = LICENSE.txt; sourceTree = "<group>"; };
 		F0109C20286F70D700B2E32F /* StringUtils.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StringUtils.swift; sourceTree = "<group>"; };
-		F052EFD0286509FB00954BC5 /* YOLOv3.mlmodel */ = {isa = PBXFileReference; lastKnownFileType = file.mlmodel; path = YOLOv3.mlmodel; sourceTree = "<group>"; };
 		F07FAED9286601530079D0D1 /* DrawingBoundingBoxView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DrawingBoundingBoxView.swift; sourceTree = "<group>"; };
 		F0DA83462874BDD100E8F8C8 /* AudioUtils.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AudioUtils.swift; sourceTree = "<group>"; };
 		F0DA83492874CB5600E8F8C8 /* noBusFound.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = noBusFound.mp3; sourceTree = "<group>"; };
@@ -43,6 +57,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				EFA9E41DB39142087E31B9BE /* Pods_BreakfastFinder.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -55,6 +70,15 @@
 				E3CB966204CD821C6969C2A3 /* LICENSE.txt */,
 			);
 			path = LICENSE;
+			sourceTree = "<group>";
+		};
+		A76C0B7F29CA3D56192E1137 /* Pods */ = {
+			isa = PBXGroup;
+			children = (
+				278F9401F5710D82A4E12783 /* Pods-BreakfastFinder.debug.xcconfig */,
+				9565333DCE68E3101EB36F3E /* Pods-BreakfastFinder.release.xcconfig */,
+			);
+			path = Pods;
 			sourceTree = "<group>";
 		};
 		F0109C1E286F3EF700B2E32F /* ViewController */ = {
@@ -71,7 +95,12 @@
 			isa = PBXGroup;
 			children = (
 				F07FAED9286601530079D0D1 /* DrawingBoundingBoxView.swift */,
+				002F45F928769DBA0032DCB7 /* GoogleCloudVisionOCR.swift */,
+				002F45F728769DAB0032DCB7 /* GoogleCloudOCRModel.swift */,
+				002F46012876AC720032DCB7 /* filtering.swift */,
+				002F46032876AC8B0032DCB7 /* TextRecognizer.swift */,
 				F0109C20286F70D700B2E32F /* StringUtils.swift */,
+				002F46052876AC970032DCB7 /* OnDeviceRecognizer.swift */,
 				F0DA83462874BDD100E8F8C8 /* AudioUtils.swift */,
 			);
 			path = Model;
@@ -83,6 +112,14 @@
 				F0DA83492874CB5600E8F8C8 /* noBusFound.mp3 */,
 			);
 			path = resource;
+			sourceTree = "<group>";
+		};
+		F7A0BB1694FC1CBB308FCF10 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				8E1FD2AD5446AC9F2E67B5EE /* Pods_BreakfastFinder.framework */,
+			);
+			name = Frameworks;
 			sourceTree = "<group>";
 		};
 		FA86553BE8674B6BE41BAA64 /* Configuration */ = {
@@ -100,6 +137,8 @@
 				FAD5009C1ED668B60074D713 /* Products */,
 				FA86553BE8674B6BE41BAA64 /* Configuration */,
 				6699E7B5AD92619B7FE916AC /* LICENSE */,
+				A76C0B7F29CA3D56192E1137 /* Pods */,
+				F7A0BB1694FC1CBB308FCF10 /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
@@ -118,9 +157,9 @@
 				F0109C1F286F709D00B2E32F /* Model */,
 				F0109C1E286F3EF700B2E32F /* ViewController */,
 				FAD5009E1ED668B60074D713 /* AppDelegate.swift */,
-				F052EFD0286509FB00954BC5 /* YOLOv3.mlmodel */,
 				FAD500A21ED668B60074D713 /* Main.storyboard */,
 				FAD500A51ED668B60074D713 /* Assets.xcassets */,
+				002F45F528767B210032DCB7 /* YOLOv3.mlmodel */,
 				FAD500AA1ED668B60074D713 /* Info.plist */,
 			);
 			path = BreakfastFinder;
@@ -133,9 +172,11 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = FAD500AD1ED668B60074D713 /* Build configuration list for PBXNativeTarget "BreakfastFinder" */;
 			buildPhases = (
+				ADB2E531C030BBA27C65BDE2 /* [CP] Check Pods Manifest.lock */,
 				FAD500971ED668B60074D713 /* Sources */,
 				FAD500981ED668B60074D713 /* Frameworks */,
 				FAD500991ED668B60074D713 /* Resources */,
+				BE0DFFF6D069F7BEE8C29E26 /* [CP] Embed Pods Frameworks */,
 			);
 			buildRules = (
 			);
@@ -194,18 +235,66 @@
 		};
 /* End PBXResourcesBuildPhase section */
 
+/* Begin PBXShellScriptBuildPhase section */
+		ADB2E531C030BBA27C65BDE2 /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
+				"${PODS_ROOT}/Manifest.lock",
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+				"$(DERIVED_FILE_DIR)/Pods-BreakfastFinder-checkManifestLockResult.txt",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
+			showEnvVarsInLog = 0;
+		};
+		BE0DFFF6D069F7BEE8C29E26 /* [CP] Embed Pods Frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-BreakfastFinder/Pods-BreakfastFinder-frameworks.sh",
+				"${BUILT_PRODUCTS_DIR}/Alamofire/Alamofire.framework",
+			);
+			name = "[CP] Embed Pods Frameworks";
+			outputPaths = (
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Alamofire.framework",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-BreakfastFinder/Pods-BreakfastFinder-frameworks.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+/* End PBXShellScriptBuildPhase section */
+
 /* Begin PBXSourcesBuildPhase section */
 		FAD500971ED668B60074D713 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				002F46062876AC970032DCB7 /* OnDeviceRecognizer.swift in Sources */,
 				F0109C21286F70D700B2E32F /* StringUtils.swift in Sources */,
-				F052EFD1286509FB00954BC5 /* YOLOv3.mlmodel in Sources */,
 				F07FAEDA286601530079D0D1 /* DrawingBoundingBoxView.swift in Sources */,
+				002F45F628767B210032DCB7 /* YOLOv3.mlmodel in Sources */,
 				F0DA834C28764BDB00E8F8C8 /* PhotoVC.swift in Sources */,
+				002F46042876AC8B0032DCB7 /* TextRecognizer.swift in Sources */,
 				FAB417F62099308400494E9C /* VisionVC.swift in Sources */,
+				002F45FA28769DBA0032DCB7 /* GoogleCloudVisionOCR.swift in Sources */,
+				002F46022876AC720032DCB7 /* filtering.swift in Sources */,
 				FAD500A11ED668B60074D713 /* CaptureOutputVC.swift in Sources */,
 				F0DA83472874BDD100E8F8C8 /* AudioUtils.swift in Sources */,
+				002F45F828769DAB0032DCB7 /* GoogleCloudOCRModel.swift in Sources */,
 				FAD5009F1ED668B60074D713 /* AppDelegate.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

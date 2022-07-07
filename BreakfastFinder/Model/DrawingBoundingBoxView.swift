@@ -56,6 +56,7 @@ class DrawingBoundingBoxView: UIView {
         }
     }
     
+    
     func createLabelAndBox(prediction: VNRecognizedObjectObservation) {
         let predictedLabel = prediction.label ?? ""
         let color: UIColor = labelColor(with: predictedLabel)

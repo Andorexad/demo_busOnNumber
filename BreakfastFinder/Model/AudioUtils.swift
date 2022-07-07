@@ -48,6 +48,7 @@ class AudioTracker{
     
     var sound: AVAudioPlayer?
     
+    
     var foundObject=Set<String>()
     
 //    func speakContext_onlyNewThings(findings: Set<String>){
@@ -60,11 +61,15 @@ class AudioTracker{
 //        speak(str: "on screen")
 //        foundObject=findings
 //    }
+    
+    // set self.status
     func setStatus(newstatus:Status){
         if self.status != newstatus{
             self.status = newstatus
         }
     }
+    
+    // announce current foundObject and set foundObject to empty
     func resetContext(){
         if foundObject.isEmpty{return}
         speak(str: "i see")
@@ -72,6 +77,7 @@ class AudioTracker{
         foundObject.removeAll()
     }
     
+
     func speak(str: String){
         
         let utterance = AVSpeechUtterance(string: str)
@@ -81,6 +87,7 @@ class AudioTracker{
         
         synthesizer.speak(utterance)
     }
+    
     
     func announceStatus(){
         switch status{
@@ -95,12 +102,14 @@ class AudioTracker{
         }
     }
     
+    // if status is on screen, stop speaking and set foundObject to empty
     func objectOnScreen(){
         sound?.pause()
         synthesizer.stopSpeaking(at: .immediate)
         foundObject.removeAll()
         speak(str: "Found on screen")
     }
+    
     
     func playMusic_NoObject(){
         if status != Status.notFound && status != Status.disappeared{
@@ -124,6 +133,7 @@ class AudioTracker{
             print("can't play music", error.localizedDescription)
         }
     }
+    
     
     func objectDisappear(){
         speak(str:"bus disappeared")

@@ -160,6 +160,8 @@ class VisionObjectRecognitionViewController: ViewController {
 //            return
 //        }
 //        self.audioTracker.playMusic_NoObject()
+        
+        
         resetContextAfter5sec()
         lastTS = curTS
         curTS = CMSampleBufferGetPresentationTimeStamp(sampleBuffer)
@@ -170,6 +172,8 @@ class VisionObjectRecognitionViewController: ViewController {
 //        if cameraIntrinsicData != nil {
 //            requestHandlerOptions[VNImageOption.cameraIntrinsics] = cameraIntrinsicData
 //        }
+        
+        
         guard let pixelBuffer = CMSampleBufferGetImageBuffer(sampleBuffer) else {
             return
         }
