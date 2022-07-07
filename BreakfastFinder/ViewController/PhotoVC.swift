@@ -20,7 +20,7 @@ class PhotoVC: UIViewController {
     override func viewDidLoad() {
         
         super.viewDidLoad()
-        //imageview.
+        
         resultTextview.isScrollEnabled=true
         imageview.image = image
         self.view.bringSubviewToFront(ondevice_ocr_button)
